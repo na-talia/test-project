@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Counter from "./components/Counter";
+import "./styles/App.css";
+import PostItem from "./components/PostItem";
 import ClassCounter from "./components/ClassCounter";
 
 function App() {
@@ -8,6 +10,7 @@ function App() {
   return (
     <div className="App">
       <Counter />
+      <PostItem />
       <ClassCounter />
       <h2>{value}</h2>
       <input
