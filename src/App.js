@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Counter from "./components/Counter";
 import "./styles/App.css";
 import PostItem from "./components/PostItem";
+import ClassCounter from "./components/ClassCounter";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -10,7 +11,7 @@ function App() {
     <div className="App">
       <Counter />
       <PostItem />
-
+      <ClassCounter />
       <h2>{value}</h2>
       <input
         type="text"
