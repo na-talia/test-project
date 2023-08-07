@@ -1,14 +1,13 @@
 import React from "react";
 
-const PostItem = () => {
+const PostItem = (props) => {
   return (
     <div className="post">
       <div className="post__content">
-        <strong>1. JavaScript</strong>
-        <div>
-          JavaScript is a programming language that allows you to implement
-          complex features on web pages.
-        </div>
+        <strong>
+          {props.post.id}. {props.post.title}
+        </strong>
+        <div>{props.post.body}</div>
       </div>
       <div className="post__btns">
         <button>Delete</button>
