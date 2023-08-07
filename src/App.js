@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <Counter />
-      <PostItem />
+      <PostItem post={{ id: 1, title: "JavaScript", body: "Description" }} />
       <ClassCounter />
       <h2>{value}</h2>
       <input
