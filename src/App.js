@@ -6,6 +6,11 @@ import ClassCounter from "./components/ClassCounter";
 
 function App() {
   const [value, setValue] = useState("Text in input");
+  const [posts, setPosts] = useState([
+    { id: 1, title: "JavaScript", body: "Description" },
+    { id: 2, title: "JavaScript 2", body: "Description" },
+    { id: 3, title: "JavaScript 3", body: "Description" },
+  ]);
 
   return (
     <div className="App">
@@ -18,6 +23,10 @@ function App() {
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />
+      <h1>List of posts</h1>
+      {posts.map((post) => (
+        <PostItem post={post} key={post.id} />
+      ))}
     </div>
   );
 }
