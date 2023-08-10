@@ -4,6 +4,7 @@ import "./styles/App.css";
 import PostItem from "./components/PostItem";
 import ClassCounter from "./components/ClassCounter";
 import MyButton from "./components/UI/button/MyButton";
+import MyInput from "./components/UI/input/MyInput";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -19,8 +20,8 @@ function App() {
       <PostItem post={{ id: 1, title: "JavaScript", body: "Description" }} />
       <ClassCounter />
       <form>
-        <input type="text" placeholder="Post title"></input>
-        <input type="text" placeholder="Description"></input>
+        <MyInput type="text" placeholder="Post title" />
+        <MyInput type="text" placeholder="Description" />
         <MyButton>Add a post</MyButton>
         {/*  <MyButton disabled>Add a post</MyButton> */}
       </form>
