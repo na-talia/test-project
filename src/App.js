@@ -20,6 +20,11 @@ function App() {
     { id: 2, title: "Python 2", body: "Description" },
     { id: 3, title: "Python 3", body: "Description" },
   ]);
+  const [title, setTitle] = useState("");
+  const addNewPost = (e) => {
+    e.preventDefault();
+    console.log(title);
+  };
 
   return (
     <div className="App">
@@ -28,9 +33,15 @@ function App() {
 
       <ClassCounter />
       <form>
-        <MyInput type="text" placeholder="Post title" />
+        {/* Controlled component */}
+        <MyInput
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          type="text"
+          placeholder="Post title"
+        />
         <MyInput type="text" placeholder="Description" />
-        <MyButton>Add a post</MyButton>
+        <MyButton onClick={addNewPost}>Add a post</MyButton>
         {/*  <MyButton disabled>Add a post</MyButton> */}
       </form>
       <h2>{value}</h2>
