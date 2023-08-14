@@ -75,6 +75,9 @@ function App() {
           type="text"
           placeholder="Post title"
         />
+
+        {/* Uncontrolled component */}
+
         <MyInput
           value={body}
           onChange={(e) => setBody(e.target.value)}
@@ -105,6 +108,7 @@ function App() {
 
         {/*  <MyButton disabled>Add a post</MyButton> */}
         {/*  <input ref={bodyInputRef} type="text" placeholder="using useRef()"></input> */}
+
       </form>
       <h2>{value}</h2>
       <input
