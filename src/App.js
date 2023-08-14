@@ -22,6 +22,7 @@ function App() {
   ]);
 
   const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
   const bodyInputRef = useRef();
 
@@ -29,6 +30,16 @@ function App() {
     e.preventDefault();
     console.log(title);
     console.log(bodyInputRef.current.value); // if just "bodyInputRef.current" without "value", then we will get the whole DOM-element <input>, but it is not recommended
+
+    const newPost = {
+      id: Date.now(),
+      title,
+      body,
+    };
+    console.log(newPost);
+    setPosts([...posts, newPost]);
+    setTitle("");
+    setBody("");
   };
 
   return (
@@ -46,7 +57,12 @@ function App() {
           type="text"
           placeholder="Post title"
         />
-
+        <MyInput
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          type="text"
+          placeholder="Body"
+        />
         {/* Uncontrolled component */}
 
         <MyInput ref={bodyInputRef} type="text" placeholder="Description" />
