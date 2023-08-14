@@ -39,16 +39,20 @@ function App() {
       <ClassCounter />
       <form>
         {/* Controlled component */}
+
         <MyInput
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           type="text"
           placeholder="Post title"
         />
-        <input ref={bodyInputRef} type="text" placeholder="hhhhhhhhhh"></input>
-        {/* <MyInput ref={bodyInputRef} type="text" placeholder="Description" />*/}
+
+        {/* Uncontrolled component */}
+
+        <MyInput ref={bodyInputRef} type="text" placeholder="Description" />
         <MyButton onClick={addNewPost}>Add a post</MyButton>
         {/*  <MyButton disabled>Add a post</MyButton> */}
+        {/* <input ref={bodyInputRef} type="text" placeholder="hhhhhhhhhh"></input> */}
       </form>
       <h2>{value}</h2>
       <input
