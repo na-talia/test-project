@@ -48,7 +48,6 @@ function App() {
         />
 
         {/* Uncontrolled component */}
-
         <MyInput ref={bodyInputRef} type="text" placeholder="Description" />
         <MyButton onClick={addNewPost}>Add a post</MyButton>
         {/*  <MyButton disabled>Add a post</MyButton> */}
