@@ -45,7 +45,7 @@ function App() {
           type="text"
           placeholder="Post title"
         />
-        <input ref={bodyInputRef} type="text" placeholder="hhhhhhhhhh"></input>
+        <input ref={bodyInputRef} type="text" placeholder="using useRef()"></input>
         {/* <MyInput ref={bodyInputRef} type="text" placeholder="Description" />*/}
         <MyButton onClick={addNewPost}>Add a post</MyButton>
         {/*  <MyButton disabled>Add a post</MyButton> */}
