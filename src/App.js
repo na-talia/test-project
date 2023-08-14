@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Counter from "./components/Counter";
 import "./styles/App.css";
 import PostItem from "./components/PostItem";
@@ -20,10 +20,15 @@ function App() {
     { id: 2, title: "Python 2", body: "Description" },
     { id: 3, title: "Python 3", body: "Description" },
   ]);
+
   const [title, setTitle] = useState("");
+
+  const bodyInputRef = useRef();
+
   const addNewPost = (e) => {
     e.preventDefault();
     console.log(title);
+    console.log(bodyInputRef.current.value); // if just "bodyInputRef.current" without "value", then we will get the whole DOM-element <input>, but it is not recommended
   };
 
   return (
@@ -40,7 +45,8 @@ function App() {
           type="text"
           placeholder="Post title"
         />
-        <MyInput type="text" placeholder="Description" />
+        <input ref={bodyInputRef} type="text" placeholder="using useRef()"></input>
+        {/* <MyInput ref={bodyInputRef} type="text" placeholder="Description" />*/}
         <MyButton onClick={addNewPost}>Add a post</MyButton>
         {/*  <MyButton disabled>Add a post</MyButton> */}
       </form>
