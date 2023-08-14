@@ -22,6 +22,8 @@ function App() {
   ]);
 
   const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [post, setPost] = useState({ title: "", body: "" });
 
   const bodyInputRef = useRef();
 
@@ -29,8 +31,35 @@ function App() {
     e.preventDefault();
     console.log(title);
     console.log(bodyInputRef.current.value); // if just "bodyInputRef.current" without "value", then we will get the whole DOM-element <input>, but it is not recommended
+
+    const newPost = {
+      id: Date.now(),
+      title,
+      body,
+    };
+
+    console.log(newPost);
+    setPosts([...posts, newPost]);
+    setTitle("");
+    setBody("");
   };
 
+  const addNewPost2 = (e) => {
+    e.preventDefault();
+    console.log(title);
+    console.log(bodyInputRef.current.value); // if just "bodyInputRef.current" without "value", then we will get the whole DOM-element <input>, but it is not recommended
+
+    const newPost2 = {
+      id: Date.now(),
+      title,
+      body,
+    };
+
+    console.log(newPost2);
+    setPosts2([...posts2, { ...post, id: Date.now() }]);
+
+    setPost({ title: "", body: "" });
+  };
   return (
     <div className="App">
       <Counter />
@@ -48,10 +77,38 @@ function App() {
         />
 
         {/* Uncontrolled component */}
+
+        <MyInput
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          type="text"
+          placeholder="Body"
+        />
+
+        {/* Add a new post using object */}
+
+        <MyInput
+          value={post.title}
+          onChange={(e) => setPost({ ...post, title: e.target.value })}
+          type="text"
+          placeholder="Post title Obj"
+        />
+        <MyInput
+          value={post.body}
+          onChange={(e) => setPost({ ...post, body: e.target.value })}
+          type="text"
+          placeholder="Body Obj"
+        />
+
+        {/* Uncontrolled component */}
+
         <MyInput ref={bodyInputRef} type="text" placeholder="Description" />
         <MyButton onClick={addNewPost}>Add a post</MyButton>
+        <MyButton onClick={addNewPost2}>Add a post 2</MyButton>
+
         {/*  <MyButton disabled>Add a post</MyButton> */}
-        {/* <input ref={bodyInputRef} type="text" placeholder="hhhhhhhhhh"></input> */}
+        {/*  <input ref={bodyInputRef} type="text" placeholder="using useRef()"></input> */}
+
       </form>
       <h2>{value}</h2>
       <input
