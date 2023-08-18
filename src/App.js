@@ -6,6 +6,7 @@ import ClassCounter from "./components/ClassCounter";
 import MyButton from "./components/UI/button/MyButton";
 import MyInput from "./components/UI/input/MyInput";
 import PostList from "./components/PostList";
+import PostForm from "./components/UI/PostForm";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -60,6 +61,10 @@ function App() {
 
     setPost({ title: "", body: "" });
   };
+
+  const createPost = (newPostForm) => {
+    setPosts([...posts, newPostForm]);
+  };
   return (
     <div className="App">
       <Counter />
@@ -108,7 +113,6 @@ function App() {
 
         {/*  <MyButton disabled>Add a post</MyButton> */}
         {/*  <input ref={bodyInputRef} type="text" placeholder="using useRef()"></input> */}
-
       </form>
       <h2>{value}</h2>
       <input
@@ -118,6 +122,7 @@ function App() {
       />
       <PostList posts={posts} title="List of posts JavaScript" />
       <PostList posts={posts2} title="List of posts Python" />
+      <PostForm create={createPost} />
     </div>
   );
 }
