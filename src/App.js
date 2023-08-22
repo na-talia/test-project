@@ -7,13 +7,14 @@ import MyButton from "./components/UI/button/MyButton";
 import MyInput from "./components/UI/input/MyInput";
 import PostList from "./components/PostList";
 import PostForm from "./components/UI/PostForm";
+import MySelect from "./components/UI/select/MySelect";
 
 function App() {
   const [value, setValue] = useState("Text in input");
   const [posts, setPosts] = useState([
-    { id: 1, title: "JavaScript", body: "Description" },
-    { id: 2, title: "JavaScript 2", body: "Description" },
-    { id: 3, title: "JavaScript 3", body: "Description" },
+    { id: 1, title: "JavaScript", body: "Description ljelkseg" },
+    { id: 2, title: "JavaScript 2", body: "Description aaaaaaaaaaaaa" },
+    { id: 3, title: "JavaScript 3", body: "Description bbb" },
   ]);
 
   const [posts2, setPosts2] = useState([
@@ -62,6 +63,7 @@ function App() {
     setPost({ title: "", body: "" });
   };
 
+  const [selectedSort, setSelectedSort] = useState("");
   const createPost = (newPostForm) => {
     setPosts([...posts, newPostForm]);
   };
@@ -69,6 +71,11 @@ function App() {
   // Get post from child component
   const removePost = (post) => {
     setPosts(posts.filter((p) => p.id !== post.id));
+  };
+
+  const sortPosts = (sort) => {
+    setSelectedSort(sort);
+    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
   };
   return (
     <div className="App">
@@ -127,7 +134,24 @@ function App() {
       />
 
       <PostForm create={createPost} />
-
+      <hr style={{ margin: "15px 0" }} />
+      <div>
+        <MySelect
+          value={selectedSort}
+          onChange={sortPosts}
+          defaultValue="Sorting"
+          options={[
+            {
+              value: "title",
+              name: "Post name",
+            },
+            {
+              value: "body",
+              name: "Post description",
+            },
+          ]}
+        />
+      </div>
       {posts.length ? (
         <PostList
           remove={removePost}
