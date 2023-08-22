@@ -125,13 +125,19 @@ function App() {
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />
-      <PostList
-        remove={removePost}
-        posts={posts}
-        title="List of posts JavaScript"
-      />
-      <PostList posts={posts2} title="List of posts Python" />
+
       <PostForm create={createPost} />
+
+      {posts.length ? (
+        <PostList
+          remove={removePost}
+          posts={posts}
+          title="List of posts JavaScript"
+        />
+      ) : (
+        <h1 style={{ textAlign: "center" }}>No posts found!</h1>
+      )}
+      <PostList posts={posts2} title="List of posts Python" />
     </div>
   );
 }
