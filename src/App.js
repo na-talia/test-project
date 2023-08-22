@@ -65,6 +65,11 @@ function App() {
   const createPost = (newPostForm) => {
     setPosts([...posts, newPostForm]);
   };
+
+  // Get post from child component
+  const removePost = (post) => {
+    setPosts(posts.filter((p) => p.id !== post.id));
+  };
   return (
     <div className="App">
       <Counter />
@@ -120,7 +125,11 @@ function App() {
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />
-      <PostList posts={posts} title="List of posts JavaScript" />
+      <PostList
+        remove={removePost}
+        posts={posts}
+        title="List of posts JavaScript"
+      />
       <PostList posts={posts2} title="List of posts Python" />
       <PostForm create={createPost} />
     </div>
