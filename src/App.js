@@ -64,6 +64,20 @@ function App() {
   };
 
   const [selectedSort, setSelectedSort] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  function getSortedPosts() {
+    console.log("getSortedPosts works");
+    if (selectedSort) {
+      return [...posts].sort((a, b) =>
+        a[selectedSort].localeCompare(b[selectedSort])
+      );
+    }
+    return posts;
+  }
+
+  const sortedPosts = getSortedPosts();
+
   const createPost = (newPostForm) => {
     setPosts([...posts, newPostForm]);
   };
@@ -136,6 +150,11 @@ function App() {
       <PostForm create={createPost} />
       <hr style={{ margin: "15px 0" }} />
       <div>
+        <MyInput
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search..."
+        />
         <MySelect
           value={selectedSort}
           onChange={sortPosts}
@@ -155,7 +174,7 @@ function App() {
       {posts.length ? (
         <PostList
           remove={removePost}
-          posts={posts}
+          posts={sortedPosts} //* posts={posts}
           title="List of posts JavaScript"
         />
       ) : (
