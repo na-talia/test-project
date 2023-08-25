@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import Counter from "./components/Counter";
 import "./styles/App.css";
 import PostItem from "./components/PostItem";
@@ -8,6 +8,7 @@ import MyInput from "./components/UI/input/MyInput";
 import PostList from "./components/PostList";
 import PostForm from "./components/UI/PostForm";
 import MySelect from "./components/UI/select/MySelect";
+import PostFilter from "./components/UI/PostFilter";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -66,17 +67,29 @@ function App() {
   const [selectedSort, setSelectedSort] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  function getSortedPosts() {
+  const [filter, setFilter] = useState({ sort: "", query: "" });
+
+  // function getSortedPosts() {}
+
+  // eslint-disable-next-line no-lone-blocks
+  {
+    /* const sortedPosts = getSortedPosts(); */
+  }
+  const sortedPosts = useMemo(() => {
     console.log("getSortedPosts works");
-    if (selectedSort) {
+    if (filter.sort) {
       return [...posts].sort((a, b) =>
-        a[selectedSort].localeCompare(b[selectedSort])
+        a[filter.sort].localeCompare(b[filter.sort])
       );
     }
     return posts;
-  }
+  }, [filter.sort, posts]); // recalculated results each time selectedSort and Posts changes
 
-  const sortedPosts = getSortedPosts();
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter((post) =>
+      post.title.toLocaleLowerCase().includes(filter.query)
+    );
+  }, [filter.query, sortedPosts]);
 
   const createPost = (newPostForm) => {
     setPosts([...posts, newPostForm]);
@@ -87,10 +100,10 @@ function App() {
     setPosts(posts.filter((p) => p.id !== post.id));
   };
 
-  const sortPosts = (sort) => {
+  /* const sortPosts = (sort) => {
     setSelectedSort(sort);
     setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
-  };
+  }; */
   return (
     <div className="App">
       <Counter />
@@ -149,37 +162,14 @@ function App() {
 
       <PostForm create={createPost} />
       <hr style={{ margin: "15px 0" }} />
-      <div>
-        <MyInput
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search..."
-        />
-        <MySelect
-          value={selectedSort}
-          onChange={sortPosts}
-          defaultValue="Sorting"
-          options={[
-            {
-              value: "title",
-              name: "Post name",
-            },
-            {
-              value: "body",
-              name: "Post description",
-            },
-          ]}
-        />
-      </div>
-      {posts.length ? (
-        <PostList
-          remove={removePost}
-          posts={sortedPosts} //* posts={posts}
-          title="List of posts JavaScript"
-        />
-      ) : (
-        <h1 style={{ textAlign: "center" }}>No posts found!</h1>
-      )}
+      <PostFilter filter={filter} setFilter={setFilter} />
+
+      <PostList
+        remove={removePost}
+        posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
+        title="List of posts JavaScript"
+      />
+
       <PostList posts={posts2} title="List of posts Python" />
     </div>
   );
