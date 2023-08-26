@@ -7,8 +7,8 @@ import MyButton from "./components/UI/button/MyButton";
 import MyInput from "./components/UI/input/MyInput";
 import PostList from "./components/PostList";
 import PostForm from "./components/UI/PostForm";
-import MySelect from "./components/UI/select/MySelect";
 import PostFilter from "./components/UI/PostFilter";
+import MyModal from "./components/UI/MyModal/MyModal";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -27,6 +27,7 @@ function App() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [post, setPost] = useState({ title: "", body: "" });
+  const [modal, setModal] = useState(false);
 
   const bodyInputRef = useRef();
 
@@ -64,9 +65,6 @@ function App() {
     setPost({ title: "", body: "" });
   };
 
-  const [selectedSort, setSelectedSort] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-
   const [filter, setFilter] = useState({ sort: "", query: "" });
 
   // function getSortedPosts() {}
@@ -93,6 +91,7 @@ function App() {
 
   const createPost = (newPostForm) => {
     setPosts([...posts, newPostForm]);
+    setModal(false);
   };
 
   // Get post from child component
@@ -159,8 +158,10 @@ function App() {
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />
-
-      <PostForm create={createPost} />
+      <MyButton onClick={() => setModal(true)}>Create a post</MyButton>
+      <MyModal visible={modal} setVisible={setModal}>
+        <PostForm create={createPost} />
+      </MyModal>
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
 
