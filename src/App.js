@@ -158,7 +158,9 @@ function App() {
         value={value}
         onChange={(event) => setValue(event.target.value)}
       />
-      <MyButton onClick={() => setModal(true)}>Create a post</MyButton>
+      <MyButton style={{ marginTop: 30 }} onClick={() => setModal(true)}>
+        Create a post
+      </MyButton>
       <MyModal visible={modal} setVisible={setModal}>
         <PostForm create={createPost} />
       </MyModal>

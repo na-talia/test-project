@@ -7,8 +7,14 @@ const MyModal = ({ children, visible, setVisible }) => {
     rootClasses.push(cl.active);
   }
   return (
-    <div className={rootClasses.join(" ")}>
-      <div className={cl.myModalContent}>{children}</div>
+    <div className={rootClasses.join(" ")} onClick={() => setVisible(false)}>
+      {" "}
+      {/* onClick => closes a modal window */}
+      <div className={cl.myModalContent} onClick={(e) => e.stopPropagation()}>
+        {" "}
+        {/* stopPropagation => doesn`t close a modal window when clicking on it */}
+        {children}
+      </div>
     </div>
   );
 };
