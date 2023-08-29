@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import axios from "axios";
 import { usePosts } from "./hooks/usePosts";
 import Counter from "./components/Counter";
 import "./styles/App.css";
@@ -90,8 +91,17 @@ function App() {
     setSelectedSort(sort);
     setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
   }; */
+
+  async function fetchPosts() {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts"
+    );
+    setPosts(response.data);
+  }
+
   return (
     <div className="App">
+      <button onClick={fetchPosts}>Get posts</button>
       <Counter />
       <PostItem post={{ id: 1, title: "Static title", body: "Description" }} />
 
