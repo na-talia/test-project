@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { usePosts } from "./hooks/usePosts";
 import Counter from "./components/Counter";
@@ -99,6 +99,9 @@ function App() {
     setPosts(response.data);
   }
 
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   return (
     <div className="App">
       <button onClick={fetchPosts}>Get posts</button>
