@@ -31,6 +31,7 @@ function App() {
   const [post, setPost] = useState({ title: "", body: "" });
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState({ sort: "", query: "" });
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
 
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
@@ -93,8 +94,12 @@ function App() {
   }; */
 
   async function fetchPosts() {
-    const posts = await PostService.getAll();
-    setPosts(posts);
+    setIsPostsLoading(true);
+    setTimeout(async () => {
+      const posts = await PostService.getAll();
+      setPosts(posts);
+      setIsPostsLoading(false);
+    }, 1000);
   }
 
   useEffect(() => {
@@ -164,12 +169,15 @@ function App() {
       </MyModal>
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-
-      <PostList
-        remove={removePost}
-        posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
-        title="List of posts JavaScript"
-      />
+      {isPostsLoading ? (
+        <h2>Loading...</h2>
+      ) : (
+        <PostList
+          remove={removePost}
+          posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
+          title="List of posts JavaScript"
+        />
+      )}
 
       <PostList posts={posts2} title="List of posts Python" />
     </div>
