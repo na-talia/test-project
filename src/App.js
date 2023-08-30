@@ -11,6 +11,7 @@ import PostForm from "./components/UI/PostForm";
 import PostFilter from "./components/UI/PostFilter";
 import MyModal from "./components/UI/MyModal/MyModal";
 import PostService from "./API/PostService";
+import Loader from "./components/UI/Loader/Loader";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -31,6 +32,7 @@ function App() {
   const [post, setPost] = useState({ title: "", body: "" });
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState({ sort: "", query: "" });
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
 
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
@@ -93,8 +95,12 @@ function App() {
   }; */
 
   async function fetchPosts() {
-    const posts = await PostService.getAll();
-    setPosts(posts);
+    setIsPostsLoading(true);
+    setTimeout(async () => {
+      const posts = await PostService.getAll();
+      setPosts(posts);
+      setIsPostsLoading(false);
+    }, 1000);
   }
 
   useEffect(() => {
@@ -164,12 +170,19 @@ function App() {
       </MyModal>
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-
-      <PostList
-        remove={removePost}
-        posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
-        title="List of posts JavaScript"
-      />
+      {isPostsLoading ? (
+        <div
+          style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
+        >
+          <Loader />
+        </div>
+      ) : (
+        <PostList
+          remove={removePost}
+          posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
+          title="List of posts JavaScript"
+        />
+      )}
 
       <PostList posts={posts2} title="List of posts Python" />
     </div>
