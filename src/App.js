@@ -11,6 +11,7 @@ import PostForm from "./components/UI/PostForm";
 import PostFilter from "./components/UI/PostFilter";
 import MyModal from "./components/UI/MyModal/MyModal";
 import PostService from "./API/PostService";
+import Loader from "./components/UI/Loader/Loader";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -170,7 +171,11 @@ function App() {
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
       {isPostsLoading ? (
-        <h2>Loading...</h2>
+        <div
+          style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
+        >
+          <Loader />
+        </div>
       ) : (
         <PostList
           remove={removePost}
