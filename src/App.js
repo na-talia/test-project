@@ -33,9 +33,15 @@ function App() {
   const [post, setPost] = useState({ title: "", body: "" });
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState({ sort: "", query: "" });
+  const [totalCount, setTotalCount] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-    const posts = await PostService.getAll();
-    setPosts(posts);
+    const response = await PostService.getAll(limit, page);
+    setPosts(response.data);
+    console.log(response.headers["x-total-count"]);
+    setTotalCount(response.headers["x-total-count"]); // console => Network => Headers: "x-total-count"
   });
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
