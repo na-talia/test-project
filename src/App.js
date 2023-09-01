@@ -12,6 +12,7 @@ import PostFilter from "./components/UI/PostFilter";
 import MyModal from "./components/UI/MyModal/MyModal";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/Loader/Loader";
+import { useFetching } from "./hooks/useFetching";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -32,8 +33,10 @@ function App() {
   const [post, setPost] = useState({ title: "", body: "" });
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState({ sort: "", query: "" });
-  const [isPostsLoading, setIsPostsLoading] = useState(false);
-
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+    const posts = await PostService.getAll();
+    setPosts(posts);
+  });
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
   const bodyInputRef = useRef();
@@ -93,15 +96,6 @@ function App() {
     setSelectedSort(sort);
     setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
   }; */
-
-  async function fetchPosts() {
-    setIsPostsLoading(true);
-    setTimeout(async () => {
-      const posts = await PostService.getAll();
-      setPosts(posts);
-      setIsPostsLoading(false);
-    }, 1000);
-  }
 
   useEffect(() => {
     fetchPosts();
@@ -170,6 +164,7 @@ function App() {
       </MyModal>
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
+      {postError && <h2> Something went wrong ${postError}</h2>}
       {isPostsLoading ? (
         <div
           style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
