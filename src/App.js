@@ -103,7 +103,7 @@ function App() {
   };
 
   const changePage = (page) => {
-    setPage(post);
+    setPage(page);
   };
   /* const sortPosts = (sort) => {
     setSelectedSort(sort);
@@ -112,7 +112,7 @@ function App() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [page]);
   return (
     <div className="App">
       <button onClick={fetchPosts}>Get posts</button>
