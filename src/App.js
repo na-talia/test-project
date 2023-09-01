@@ -14,6 +14,7 @@ import PostService from "./API/PostService";
 import Loader from "./components/UI/Loader/Loader";
 import { useFetching } from "./hooks/useFetching";
 import { getPageCount, getPagesArray } from "./utils/pages";
+import Pagination from "./components/UI/pagination/Pagination";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -48,7 +49,6 @@ function App() {
   console.log(totalPages);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
-  let pagesArray = getPagesArray(totalPages);
   const bodyInputRef = useRef();
 
   const addNewPost = (e) => {
@@ -193,17 +193,7 @@ function App() {
       )}
 
       <PostList posts={posts2} title="List of posts Python" />
-      <div className="page__wrapper">
-        {pagesArray.map((p) => (
-          <span
-            onClick={() => changePage(p)}
-            key={p}
-            className={page === p ? "page page__current" : "page"}
-          >
-            {p}
-          </span>
-        ))}
-      </div>
+      <Pagination page={page} changePage={changePage} totalPages={totalPages} />
     </div>
   );
 }
