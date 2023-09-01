@@ -13,6 +13,7 @@ import MyModal from "./components/UI/MyModal/MyModal";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/Loader/Loader";
 import { useFetching } from "./hooks/useFetching";
+import { getPageCount, getPagesArray } from "./utils/pages";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -33,18 +34,21 @@ function App() {
   const [post, setPost] = useState({ title: "", body: "" });
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState({ sort: "", query: "" });
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
 
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
     const response = await PostService.getAll(limit, page);
     setPosts(response.data);
-    console.log(response.headers["x-total-count"]);
-    setTotalCount(response.headers["x-total-count"]); // console => Network => Headers: "x-total-count"
+    const totalCount = response.headers["x-total-count"]; // console => Network => Headers: "x-total-count"
+    setTotalPages(getPageCount(totalCount, limit));
   });
+
+  console.log(totalPages);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
+  let pagesArray = getPagesArray(totalPages);
   const bodyInputRef = useRef();
 
   const addNewPost = (e) => {
@@ -98,6 +102,9 @@ function App() {
     setPosts(posts.filter((p) => p.id !== post.id));
   };
 
+  const changePage = (page) => {
+    setPage(post);
+  };
   /* const sortPosts = (sort) => {
     setSelectedSort(sort);
     setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
@@ -186,6 +193,17 @@ function App() {
       )}
 
       <PostList posts={posts2} title="List of posts Python" />
+      <div className="page__wrapper">
+        {pagesArray.map((p) => (
+          <span
+            onClick={() => changePage(p)}
+            key={p}
+            className={page === p ? "page page__current" : "page"}
+          >
+            {p}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
