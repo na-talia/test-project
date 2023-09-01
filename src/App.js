@@ -13,6 +13,8 @@ import MyModal from "./components/UI/MyModal/MyModal";
 import PostService from "./API/PostService";
 import Loader from "./components/UI/Loader/Loader";
 import { useFetching } from "./hooks/useFetching";
+import { getPageCount, getPagesArray } from "./utils/pages";
+import Pagination from "./components/UI/pagination/Pagination";
 
 function App() {
   const [value, setValue] = useState("Text in input");
@@ -33,10 +35,18 @@ function App() {
   const [post, setPost] = useState({ title: "", body: "" });
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState({ sort: "", query: "" });
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-    const posts = await PostService.getAll();
-    setPosts(posts);
+    const response = await PostService.getAll(limit, page);
+    setPosts(response.data);
+    const totalCount = response.headers["x-total-count"]; // console => Network => Headers: "x-total-count"
+    setTotalPages(getPageCount(totalCount, limit));
   });
+
+  console.log(totalPages);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
   const bodyInputRef = useRef();
@@ -92,6 +102,9 @@ function App() {
     setPosts(posts.filter((p) => p.id !== post.id));
   };
 
+  const changePage = (page) => {
+    setPage(page);
+  };
   /* const sortPosts = (sort) => {
     setSelectedSort(sort);
     setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
@@ -99,7 +112,7 @@ function App() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [page]);
   return (
     <div className="App">
       <button onClick={fetchPosts}>Get posts</button>
@@ -180,6 +193,7 @@ function App() {
       )}
 
       <PostList posts={posts2} title="List of posts Python" />
+      <Pagination page={page} changePage={changePage} totalPages={totalPages} />
     </div>
   );
 }
