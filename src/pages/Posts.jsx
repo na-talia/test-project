@@ -1,20 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-import { usePosts } from "./hooks/usePosts";
-import Counter from "./components/Counter";
-import "./styles/App.css";
-import PostItem from "./components/PostItem";
-import ClassCounter from "./components/ClassCounter";
-import MyButton from "./components/UI/button/MyButton";
-import MyInput from "./components/UI/input/MyInput";
-import PostList from "./components/PostList";
-import PostForm from "./components/UI/PostForm";
-import PostFilter from "./components/UI/PostFilter";
-import MyModal from "./components/UI/MyModal/MyModal";
-import PostService from "./API/PostService";
-import Loader from "./components/UI/Loader/Loader";
-import { useFetching } from "./hooks/useFetching";
-import { getPageCount } from "./utils/pages";
-import Pagination from "./components/UI/pagination/Pagination";
+import { usePosts } from "../hooks/usePosts";
+import Counter from "../components/Counter";
+import "../styles/App.css";
+import PostItem from "../components/PostItem";
+import ClassCounter from "../components/ClassCounter";
+import MyButton from "../components/UI/button/MyButton";
+import MyInput from "../components/UI/input/MyInput";
+import PostList from "../components/PostList";
+import PostForm from "../components/UI/PostForm";
+import PostFilter from "../components/UI/PostFilter";
+import MyModal from "../components/UI/MyModal/MyModal";
+import PostService from "../API/PostService";
+import Loader from "../components/UI/Loader/Loader";
+import { useFetching } from "../hooks/useFetching";
+import { getPageCount } from "../utils/pages";
+import Pagination from "../components/UI/pagination/Pagination";
 
 function Posts() {
   const [value, setValue] = useState("Text in input");
