@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "../../router";
 import { Navigate } from "react-router-dom";
+import { AuthContext } from "../../context";
 
 const AppRouter = () => {
-  const isAuth = true; /* if it is false = then redirect to Login page */
+  const { isAuth } = useContext(AuthContext);
+  console.log(isAuth);
   return isAuth ? (
     <Routes>
       {privateRoutes.map((route) => (
@@ -12,6 +14,7 @@ const AppRouter = () => {
           element={<route.element />}
           path={route.path}
           exact={route.exact}
+          key={route.path}
         />
       ))}
     </Routes>
@@ -22,6 +25,7 @@ const AppRouter = () => {
           element={<route.element />}
           path={route.path}
           exact={route.exact}
+          key={route.path}
         />
       ))}
       <Route path="/*" element={<Navigate to="/login" replace />} />
