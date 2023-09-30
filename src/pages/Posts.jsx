@@ -38,10 +38,12 @@ function Posts() {
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const lastElement = useRef();
+  const observer = useRef();
 
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
     const response = await PostService.getAll(limit, page);
-    setPosts(response.data);
+    setPosts([...posts, ...response.data]);
     const totalCount = response.headers["x-total-count"]; // console => Network => Headers: "x-total-count"
     setTotalPages(getPageCount(totalCount, limit));
   });
@@ -111,7 +113,20 @@ function Posts() {
   }; */
 
   useEffect(() => {
-    fetchPosts();
+    if (isPostsLoading) return;
+    if (observer.current) observer.current.disconnect();
+    var callback = function (entries, observer) {
+      if (entries[0].isIntersecting && page < totalPages) {
+        console.log(page);
+        setPage(page + 1);
+      }
+    };
+    observer.current = new IntersectionObserver(callback);
+    observer.current.observe(lastElement.current);
+  }, [isPostsLoading]);
+
+  useEffect(() => {
+    fetchPosts(limit, page);
   }, [page]);
   return (
     <div className="App">
@@ -178,18 +193,18 @@ function Posts() {
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
       {postError && <h2> Something went wrong ${postError}</h2>}
-      {isPostsLoading ? (
+      <PostList
+        remove={removePost}
+        posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
+        title="List of posts JavaScript"
+      />
+      <div ref={lastElement} style={{ height: 20, background: "red" }}></div>
+      {isPostsLoading && (
         <div
           style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
         >
           <Loader />
         </div>
-      ) : (
-        <PostList
-          remove={removePost}
-          posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
-          title="List of posts JavaScript"
-        />
       )}
 
       <PostList posts={posts2} title="List of posts Python" />
