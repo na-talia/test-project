@@ -15,6 +15,7 @@ import Loader from "../components/UI/Loader/Loader";
 import { useFetching } from "../hooks/useFetching";
 import { getPageCount } from "../utils/pages";
 import Pagination from "../components/UI/pagination/Pagination";
+import { useObserver } from "../hooks/useObserver";
 
 function Posts() {
   const [value, setValue] = useState("Text in input");
@@ -38,10 +39,11 @@ function Posts() {
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const lastElement = useRef();
 
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
     const response = await PostService.getAll(limit, page);
-    setPosts(response.data);
+    setPosts([...posts, ...response.data]);
     const totalCount = response.headers["x-total-count"]; // console => Network => Headers: "x-total-count"
     setTotalPages(getPageCount(totalCount, limit));
   });
@@ -110,8 +112,11 @@ function Posts() {
     setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
   }; */
 
+  useObserver(lastElement, page < totalPages, isPostsLoading, () => {
+    setPage(page + 1);
+  });
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(limit, page);
   }, [page]);
   return (
     <div className="App">
@@ -178,18 +183,18 @@ function Posts() {
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
       {postError && <h2> Something went wrong ${postError}</h2>}
-      {isPostsLoading ? (
+      <PostList
+        remove={removePost}
+        posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
+        title="List of posts JavaScript"
+      />
+      <div ref={lastElement} style={{ height: 20, background: "red" }}></div>
+      {isPostsLoading && (
         <div
           style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
         >
           <Loader />
         </div>
-      ) : (
-        <PostList
-          remove={removePost}
-          posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
-          title="List of posts JavaScript"
-        />
       )}
 
       <PostList posts={posts2} title="List of posts Python" />
