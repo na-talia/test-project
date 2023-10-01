@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { usePosts } from "../hooks/usePosts";
 import "../styles/App.css";
-import PostItem from "../components/PostItem";
 import MyButton from "../components/UI/button/MyButton";
 import MyInput from "../components/UI/input/MyInput";
 import PostList from "../components/PostList";
@@ -15,6 +14,7 @@ import { getPageCount } from "../utils/pages";
 import Pagination from "../components/UI/pagination/Pagination";
 import { useObserver } from "../hooks/useObserver";
 import MySelect from "../components/UI/select/MySelect";
+import MyPosts from "./MyPosts";
 
 function Posts() {
   const [value, setValue] = useState("Text in input");
@@ -22,12 +22,6 @@ function Posts() {
     { id: 1, title: "JavaScript", body: "Description ljelkseg" },
     { id: 2, title: "JavaScript 2", body: "Description aaaaaaaaaaaaa" },
     { id: 3, title: "JavaScript 3", body: "Description bbb" },
-  ]);
-
-  const [posts2, setPosts2] = useState([
-    { id: 1, title: "Python", body: "Description" },
-    { id: 2, title: "Python 2", body: "Description" },
-    { id: 3, title: "Python 3", body: "Description" },
   ]);
 
   const [title, setTitle] = useState("");
@@ -47,15 +41,12 @@ function Posts() {
     setTotalPages(getPageCount(totalCount, limit));
   });
 
-  console.log(totalPages);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
   const bodyInputRef = useRef();
 
   const addNewPost = (e) => {
     e.preventDefault();
-    console.log(title);
-    console.log(bodyInputRef.current.value); // if just "bodyInputRef.current" without "value", then we will get the whole DOM-element <input>, but it is not recommended
 
     const newPost = {
       id: Date.now(),
@@ -63,27 +54,9 @@ function Posts() {
       body,
     };
 
-    console.log(newPost);
     setPosts([...posts, newPost]);
     setTitle("");
     setBody("");
-  };
-
-  const addNewPost2 = (e) => {
-    e.preventDefault();
-    console.log(title);
-    console.log(bodyInputRef.current.value); // if just "bodyInputRef.current" without "value", then we will get the whole DOM-element <input>, but it is not recommended
-
-    const newPost2 = {
-      id: Date.now(),
-      title,
-      body,
-    };
-
-    console.log(newPost2);
-    setPosts2([...posts2, { ...post, id: Date.now() }]);
-
-    setPost({ title: "", body: "" });
   };
 
   const createPost = (newPostForm) => {
@@ -109,6 +82,7 @@ function Posts() {
 
   return (
     <div className="App">
+      <MyPosts />
       <button onClick={fetchPosts}>Get posts</button>
 
       <form>
@@ -149,7 +123,6 @@ function Posts() {
 
         <MyInput ref={bodyInputRef} type="text" placeholder="Description" />
         <MyButton onClick={addNewPost}>Add a posttttttttttttttttttttt</MyButton>
-        <MyButton onClick={addNewPost2}>Add a post 2</MyButton>
       </form>
       <h2>{value}</h2>
       <input
@@ -177,7 +150,6 @@ function Posts() {
         ]}
       />
       {postError && <h2> Something went wrong ${postError}</h2>}
-      <PostList posts={posts2} title="List of posts Python" />
 
       <PostList
         remove={removePost}
