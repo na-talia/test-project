@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { usePosts } from "../hooks/usePosts";
-import Counter from "../components/Counter";
 import "../styles/App.css";
 import PostItem from "../components/PostItem";
-import ClassCounter from "../components/ClassCounter";
 import MyButton from "../components/UI/button/MyButton";
 import MyInput from "../components/UI/input/MyInput";
 import PostList from "../components/PostList";
@@ -88,13 +86,6 @@ function Posts() {
     setPost({ title: "", body: "" });
   };
 
-  // function getSortedPosts() {}
-
-  // eslint-disable-next-line no-lone-blocks
-  {
-    /* const sortedPosts = getSortedPosts(); */
-  }
-
   const createPost = (newPostForm) => {
     setPosts([...posts, newPostForm]);
     setModal(false);
@@ -108,10 +99,6 @@ function Posts() {
   const changePage = (page) => {
     setPage(page);
   };
-  /* const sortPosts = (sort) => {
-    setSelectedSort(sort);
-    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort]))); // created a new [array] and then used Sorting, it helps not to modify previous array
-  }; */
 
   useObserver(lastElement, page < totalPages, isPostsLoading, () => {
     setPage(page + 1);
@@ -119,13 +106,11 @@ function Posts() {
   useEffect(() => {
     fetchPosts(limit, page);
   }, [page, limit]);
+
   return (
     <div className="App">
       <button onClick={fetchPosts}>Get posts</button>
-      <Counter />
-      <PostItem post={{ id: 1, title: "Static title", body: "Description" }} />
 
-      <ClassCounter />
       <form>
         {/* Controlled component */}
 
@@ -163,11 +148,8 @@ function Posts() {
         {/* Uncontrolled component */}
 
         <MyInput ref={bodyInputRef} type="text" placeholder="Description" />
-        <MyButton onClick={addNewPost}>Add a post</MyButton>
+        <MyButton onClick={addNewPost}>Add a posttttttttttttttttttttt</MyButton>
         <MyButton onClick={addNewPost2}>Add a post 2</MyButton>
-
-        {/*  <MyButton disabled>Add a post</MyButton> */}
-        {/*  <input ref={bodyInputRef} type="text" placeholder="using useRef()"></input> */}
       </form>
       <h2>{value}</h2>
       <input
@@ -195,9 +177,11 @@ function Posts() {
         ]}
       />
       {postError && <h2> Something went wrong ${postError}</h2>}
+      <PostList posts={posts2} title="List of posts Python" />
+
       <PostList
         remove={removePost}
-        posts={sortedAndSearchedPosts} //* posts={posts} then posts={sortedPosts}
+        posts={sortedAndSearchedPosts}
         title="List of posts JavaScript"
       />
       <div ref={lastElement} style={{ height: 20, background: "red" }}></div>
@@ -209,7 +193,6 @@ function Posts() {
         </div>
       )}
 
-      <PostList posts={posts2} title="List of posts Python" />
       <Pagination page={page} changePage={changePage} totalPages={totalPages} />
     </div>
   );
